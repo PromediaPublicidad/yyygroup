@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tipografías y ajustes generales */
+html, body {
+  scroll-behavior: smooth;
+}
