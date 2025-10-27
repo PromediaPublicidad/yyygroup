@@ -843,7 +843,7 @@ function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onCl
         companyIds={currentIds}
         onOpenCompany={onOpenCompany}
         onClose={onClose}
-        theme={theme}
+        theme="dark"
         lang={lang}
         logos={logos}
         companies={companies}
@@ -906,7 +906,7 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
 
         {/* Carrusel */}
         <div className="px-6 pt-5">
-          <Carousel images={images} alt={name} theme={theme} positions={positions} zoom={zoom} />
+          <Carousel images={images} alt={name} theme="dark" positions={positions} zoom={zoom} />
         </div>
 
         {/* copy + links */}
@@ -918,22 +918,22 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           ))}
           <div className="mt-2 flex flex-wrap items-center gap-2">
             {contacts.web && contacts.web !== "#" && (
-              <AButton href={withUTM(contacts.web)} icon={ExternalLink} theme={theme}>
+              <AButton href={withUTM(contacts.web)} icon={ExternalLink} theme="dark">
                 {COPY[lang].webCta}
               </AButton>
             )}
             {contacts.instagram && contacts.instagram !== "#" && (
-              <AButton href={contacts.instagram} icon={Instagram} theme={theme}>
+              <AButton href={contacts.instagram} icon={Instagram} theme="dark">
                 Instagram
               </AButton>
             )}
             {contacts.facebook && contacts.facebook !== "#" && (
-              <AButton href={contacts.facebook} icon={Facebook} theme={theme}>
+              <AButton href={contacts.facebook} icon={Facebook} theme="dark">
                 Facebook
               </AButton>
             )}
             {contacts.email && (
-              <AButton href={`mailto:${contacts.email}`} icon={Mail} theme={theme}>
+              <AButton href={`mailto:${contacts.email}`} icon={Mail} theme="dark">
                 Email
               </AButton>
             )}
@@ -1048,7 +1048,7 @@ const ThankYouBanner = ({ theme, lang }) => {
 
 /* ───────────────────────────── App ───────────────────────── */
 export default function YGroupLanding() {
-  const [theme, setTheme] = useState("dark");
+  const theme = "dark"; // 🔒 siempre oscuro
   const [lang, setLang] = useState("es");
   const [activeCat, setActiveCat] = useState("all"); // "all" | categoryId
   const [selected, setSelected] = useState(null); // companyId
@@ -1057,18 +1057,16 @@ export default function YGroupLanding() {
 
   useEffect(() => {
     try {
-      const st = localStorage.getItem("ygroup_theme");
       const sl = localStorage.getItem("ygroup_lang");
-      if (st) setTheme(st);
       if (sl) setLang(sl);
     } catch {}
   }, []);
   useEffect(() => {
     try {
-      localStorage.setItem("ygroup_theme", theme);
       localStorage.setItem("ygroup_lang", lang);
     } catch {}
-  }, [theme, lang]);
+  }, [lang]);
+
 
   useEffect(() => {
     document.documentElement.setAttribute("lang", lang);
@@ -1088,23 +1086,11 @@ export default function YGroupLanding() {
 
   return (
     <div
-      data-theme={theme}
-      className={cx(
-        "min-h-screen w-full",
-        theme === "dark"
-          ? "text-slate-100 bg-[radial-gradient(80%_60%_at_50%_-10%,rgba(56,189,248,0.15),transparent_60%),radial-gradient(60%_50%_at_80%_10%,rgba(34,211,238,0.10),transparent_60%),linear-gradient(180deg,#0f172a,#0b1220)]"
-          : "bg-white text-slate-900"
-      )}
-    >
+    data-theme="dark"
+    className="min-h-screen w-full text-slate-100 bg-[radial-gradient(80%_60%_at_50%_-10%,rgba(56,189,248,0.15),transparent_60%),radial-gradient(60%_50%_at_80%_10%,rgba(34,211,238,0.10),transparent_60%),linear-gradient(180deg,#0f172a,#0b1220)]"
+  >
       {/* NAV */}
-      <header
-        className={cx(
-          "sticky top-0 z-40 backdrop-blur",
-          theme === "dark"
-            ? "supports-[backdrop-filter]:bg-slate-900/40"
-            : "supports-[backdrop-filter]:bg-white/70 border-b border-slate-200"
-        )}
-      >
+      <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 gap-4">
           {/* Brand */}
           <div className="flex items-center gap-3">
@@ -1156,46 +1142,25 @@ export default function YGroupLanding() {
             )}
           </nav>
 
-          {/* switches + CTA */}
+          {/* idioma + CTA */}
           <div className="flex items-center gap-2">
-            {/* Idioma */}
-            <div
-              className={cx(
-                "hidden md:flex items-center rounded-xl border px-1 py-0.5 text-xs",
-                theme === "dark" ? "border-slate-800 bg-slate-900/50 text-slate-200" : "border-slate-200 bg-white text-slate-700"
-              )}
-            >
+            {/* Idioma (ahora visible también en móvil) */}
+            <div className="flex items-center rounded-xl border px-1 py-0.5 text-xs border-slate-800 bg-slate-900/50 text-slate-200">
               {["es", "en"].map((code) => (
                 <button
                   key={code}
                   onClick={() => setLang(code)}
-                  className={cx(
-                    "px-2 py-1 rounded-lg",
-                    lang === code
-                      ? theme === "dark"
-                        ? "bg-sky-500/20 text-sky-200"
-                        : "bg-sky-100 text-sky-700"
-                      : "opacity-70 hover:opacity-100"
-                  )}
+                   className={cx(
+            "px-2 py-1 rounded-lg",
+            lang === code ? "bg-sky-500/20 text-sky-200" : "opacity-70 hover:opacity-100"
+             )}
                 >
                   {code.toUpperCase()}
                 </button>
               ))}
             </div>
 
-            {/* Tema */}
-            <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className={cx(
-                "rounded-xl px-3 py-1.5 text-xs",
-                theme === "dark"
-                  ? "border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
-                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              )}
-              aria-label="theme"
-            >
-              {theme === "dark" ? "◐" : "◑"}
-            </button>
+            {/* (tema eliminado: solo dark) */}
 
             {/* CTA */}
             <button
@@ -1220,7 +1185,7 @@ export default function YGroupLanding() {
       <section className="relative mx-auto w-full max-w-7xl px-6 pb-10 pt-14 md:pt-16">
         <div className={cx("relative overflow-hidden rounded-3xl border",
           theme === "dark" ? "border-slate-800/60" : "border-slate-300/80")}>
-          <BackgroundFX theme={theme} />
+          <BackgroundFX theme="dark" />
           <div className="relative grid p-8 md:p-10 items-center md:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] gap-6">
             {/* texto */}
             <motion.div
@@ -1229,7 +1194,7 @@ export default function YGroupLanding() {
               transition={{ duration: 0.6 }}
               className="flex flex-col items-start gap-6"
             >
-              <Badge theme={theme}>{COPY[lang].badge}</Badge>
+              <Badge theme="dark">{COPY[lang].badge}</Badge>
 
               <h1
                 className="font-semibold tracking-tight"
@@ -1263,14 +1228,9 @@ export default function YGroupLanding() {
                   {COPY[lang].viewPortfolio} <ArrowRight className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => scrollToEl(contactoRef, { focusEmail: true })}
-                  className={cx(
-                    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm",
-                    theme === "dark"
-                      ? "border border-slate-700 bg-slate-900/40 text-slate-200 hover:bg-slate-900"
-                      : "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50"
-                  )}
-                >
+                 onClick={() => scrollToEl(contactoRef, { focusEmail: true })}
+                 className="rounded-xl px-3 py-1.5 text-xs border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
+                 >
                   {t.talk}
                 </button>
               </div>
@@ -1287,10 +1247,10 @@ export default function YGroupLanding() {
       {/* PORTFOLIO */}
       <section id="portfolio" ref={portfolioRef} className="mx-auto w-full max-w-7xl px-6 pb-10">
         {activeCat === "all" ? (
-          <DiagonalLanding theme={theme} lang={lang} onPick={setActiveCat} />
+          <DiagonalLanding theme="dark" lang={lang} onPick={setActiveCat} />
         ) : activeCat === "retail" ? (
           <RetailCategoryOpen
-            theme={theme}
+            theme="dark"
             lang={lang}
             logos={LOGOS}
             companies={COMPANIES}
@@ -1305,14 +1265,14 @@ export default function YGroupLanding() {
               : "border border-slate-200 bg-white"
           )}>
             <CategoryOpen
-              key={theme}
+              key="dark"
               title={CATEGORIES.find((c) => c.id === activeCat).title[lang]}
               blurb={CATEGORIES.find((c) => c.id === activeCat).blurb[lang]}
               icon={CATEGORIES.find((c) => c.id === activeCat).icon}
               companyIds={CATEGORIES.find((c) => c.id === activeCat).companies}
               onOpenCompany={(id) => setSelected(id)}
               onClose={() => setActiveCat("all")}
-              theme={theme}
+              theme="dark"
               lang={lang}
               logos={LOGOS}
               companies={COMPANIES}
@@ -1326,7 +1286,7 @@ export default function YGroupLanding() {
         <CompanyModal
           companyId={selected}
           onClose={() => setSelected(null)}
-          theme={theme}
+          theme="dark"
           lang={lang}
         />
       )}
@@ -1391,11 +1351,11 @@ export default function YGroupLanding() {
 
       {/* GRACIAS */}
       <section id="gracias" className="mx-auto w-full max-w-7xl px-6 pb-4">
-        <ThankYouBanner theme={theme} lang={lang} />
+        <ThankYouBanner theme="dark" lang={lang} />
       </section>
 
       <Footer
-        theme={theme}
+        theme="dark"
         lang={lang}
         onGoTop={() => {
           if (topRef.current) window.scrollTo({ top: 0, behavior: "smooth" });
