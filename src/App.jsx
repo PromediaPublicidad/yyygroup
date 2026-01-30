@@ -254,7 +254,7 @@ const COMPANIES = {
     },
     contacts: {},
     url: "#",
-    images: ["/companies/dyoni/1.jpg", "/companies/dyoni/2.jpg"],
+    images: ["/images/companies/dyoni/1.jpg", "/images/companies/dyoni/2.jpg"],
   },
   montevito: {
     name: { es: "Montevito", en: "Montevito" },
@@ -267,7 +267,7 @@ const COMPANIES = {
     },
     contacts: {},
     url: "#",
-    images: ["/images/companies/montevito/1.jpg", "/images/companies/montevito/2.jpg", "/images/companies/montevito/3.jpg", "/images/companies/montevito/4.jpg", "/images/companies/montevito/5.jpg"],
+    images: ["/images/companies/montevito/1.jpeg", "/images/companies/montevito/2.jpeg"],
   },
 
   mcdonalds: {
