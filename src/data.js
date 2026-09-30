@@ -4,7 +4,6 @@ export const LOGOS = {
   regenerationclinicpanama: "/logos/healthcare/regeneration-clinic-panama.png",
   drsalud: "/logos/healthcare/dr-salud.png",
   iseeoptics: "/logos/healthcare/i-see-optics.png",
-  medifercorp: "/logos/healthcare/medifercorp.svg",
 
   aleph: "/logos/distribution/aleph.png",
   velox: "/logos/distribution/velox.png",
@@ -17,7 +16,6 @@ export const LOGOS = {
   rosaclara: "/logos/retail/rosa-clara.png",
 
   promedia: "/logos/services/promedia.png",
-  paguelofacil: "/logos/services/paguelofacil.png",
 };
 
 // Texto breve por empresa (ES/EN). Ajusta lo que necesites.
@@ -64,21 +62,6 @@ export const COMPANIES = {
     },
     contacts: { instagram: "https://www.instagram.com/i.seeoptics/?hl=es" },
   },
-  medifercorp: {
-    name: { es: "MediferCorp", en: "MediferCorp" },
-    story: {
-      es: [
-        "Comercialización de productos médicos con foco en disponibilidad y cumplimiento.",
-        "Trazabilidad y almacenamiento seguro no negociables.",
-      ],
-      en: [
-        "Medical products distribution focused on availability and compliance.",
-        "Traceability and safe storage are non-negotiable.",
-      ],
-    },
-    contacts: {},
-  },
-
   aleph: {
     name: { es: "Aleph Group", en: "Aleph Group" },
     story: {
@@ -191,16 +174,5 @@ export const COMPANIES = {
       ],
     },
     contacts: { web: "https://www.promediapublicidad.com/" },
-  },
-  paguelofacil: {
-    name: { es: "PagueloFacil", en: "PagueloFacil" },
-    story: {
-      es: [
-        "Plataforma de pagos usada en Panamá con múltiples bancos y canales.",
-        "Integración simple, seguridad y soporte cercano.",
-      ],
-      en: ["Payment platform widely used in Panama.", "Simple integration, security and close support."],
-    },
-    contacts: { web: "https://www.paguelofacil.com/" },
   },
 };

@@ -132,7 +132,6 @@ const LOGOS = {
   rosaclara: "/logos/retail/rosa-clara.png",
 
   promedia: "/logos/services/promedia.png",
-  paguelofacil: "/logos/services/paguelofacil.png",
 };
 
 const COMPANIES = {
@@ -215,9 +214,9 @@ const COMPANIES = {
     contacts: {},
     url: "#",
     images: [
-      "/companies/medifergroup/1.webp",
-      "/companies/medifergroup/2.webp",
-      "/companies/medifergroup/3.webp",
+      "/images/companies/medifergroup/1.webp",
+      "/images/companies/medifergroup/2.webp",
+      "/images/companies/medifergroup/3.webp",
     ],
   },
 
@@ -339,7 +338,6 @@ const COMPANIES = {
       es: [
         "Experiencias nupciales y de fiesta con atención al detalle.",
         "Pruebas y ajustes personalizados sin sobresaltos.",
-        "Tenemos mas de () locales en las ciudades de ().",
       ],
       en: [
         "Bridal and evening experiences where detail matters.",
@@ -373,25 +371,6 @@ const COMPANIES = {
       "/images/companies/promedia/5.JPG",
     ],
   },
-  paguelofacil: {
-    name: { es: "PagueloFacil", en: "PagueloFacil" },
-    story: {
-      es: [
-        "Plataforma de pagos usada en Panamá con múltiples bancos y canales.",
-        "Integración simple, seguridad y soporte cercano.",
-      ],
-      en: ["Payment platform widely used in Panama.", "Simple integration, security and close support."],
-    },
-    contacts: { web: "https://www.paguelofacil.com/" },
-    url: "https://www.paguelofacil.com/",
-    images: [
-      "/images/companies/paguelofacil/1.jpg",
-      "/images/companies/paguelofacil/2.jpg",
-      "/images/companies/paguelofacil/3.jpg",
-      "/images/companies/paguelofacil/4.jpeg",
-      "/images/companies/paguelofacil/5.jpg",
-    ],
-  },
 };
 
 /* ───── Ajustes de imagen ───── */
@@ -399,7 +378,7 @@ const IMAGE_CROP = {
   regenerationclinicpanama: [50, 47, 68, 50, 43],
   drsalud: [50, 50, 38, 40, 40],
   iseeoptics: [56, 50, 50, 50, 50],
-  medifercorp: [50],
+  medifergroup: [50],
   aleph: [50, 50, 50, 50, 40],
   velox: [8],
   dyoni: [50, 50],
@@ -409,14 +388,13 @@ const IMAGE_CROP = {
   shams: [50],
   rosaclara: [15, 40, 35, 25, 50],
   promedia: [50, 50, 50, 38, 50],
-  paguelofacil: [50, 50, 50, 50, 50],
 };
 
 const IMAGE_ZOOM = {
   regenerationclinicpanama: [1, 1, 1, 1, 1],
   drsalud: [1, 1, 1, 1, 1],
   iseeoptics: [1, 1, 1, 1, 1],
-  medifercorp: [1],
+  medifergroup: [1],
   aleph: [1, 1, 1, 1, 1],
   velox: [1],
   dyoni: [1, 1],
@@ -426,7 +404,6 @@ const IMAGE_ZOOM = {
   shams: [1],
   rosaclara: [1, 1, 1, 1, 1],
   promedia: [1, 1, 1, 1, 1],
-  paguelofacil: [1, 1, 1, 1, 1],
 };
 
 /* ───────── CATEGORÍAS (retail único a nivel superior) ───────── */
@@ -436,7 +413,7 @@ const CATEGORIES = [
     icon: HeartPulse,
     title: { es: COPY.es.cat_healthcare, en: COPY.en.cat_healthcare },
     blurb: { es: COPY.es.blurb_healthcare, en: COPY.en.blurb_healthcare },
-    companies: ["regenerationclinicpanama", "drsalud", "iseeoptics", "medifercorp"],
+    companies: ["regenerationclinicpanama", "drsalud", "iseeoptics", "medifergroup"],
   },
   {
     id: "distribution",
@@ -457,7 +434,7 @@ const CATEGORIES = [
     icon: Briefcase,
     title: { es: COPY.es.cat_services, en: COPY.en.cat_services },
     blurb: { es: COPY.es.blurb_services, en: COPY.en.blurb_services },
-    companies: ["promedia", "paguelofacil"],
+    companies: ["promedia"],
   },
 ];
 
@@ -494,7 +471,7 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
   const EDGE_COLOR = isDark ? "rgba(148,163,184,.18)" : "rgba(15,23,42,.16)";
 
   return (
-    <section className="relative mx-auto w-full max-w-7xl px-6 pb-16 pt-12">
+    <section className="relative mx-auto w-full max-w-7xl px-4 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-12">
       <div className={`relative overflow-hidden rounded-3xl ${sectionBg}`}>
         <div className="hidden md:grid grid-cols-4 gap-0">
           {CATEGORIES.map((cat, i) => (
@@ -582,14 +559,14 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden grid grid-cols-1 gap-4 p-4">
+        <div className="grid grid-cols-1 gap-3 p-3 md:hidden sm:gap-4 sm:p-4">
           {CATEGORIES.map((cat) => (
             <motion.button
               key={cat.id}
               onClick={() => onPick?.(cat.id)}
               whileTap={{ scale: 0.98 }}
               className={cx(
-                "relative overflow-hidden rounded-2xl p-4 text-left",
+                "relative overflow-hidden rounded-2xl p-4 text-left shadow-[0_12px_35px_-24px_rgba(56,189,248,.8)]",
                 isDark
                   ? "bg-[rgba(13,23,38,0.9)]"
                   : "border border-slate-200 bg-[rgba(255,255,255,0.96)]"
@@ -666,13 +643,22 @@ function HeroGlobe({ size = 520, cyan = "#45e6ff" }) {
 function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom = [] }) {
   const [idx, setIdx] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const n = images.length || 0;
 
   useEffect(() => {
-    if (!n || paused) return;
+    const media = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener?.("change", update);
+    return () => media.removeEventListener?.("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!n || paused || isMobile) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % n), 3500);
     return () => clearInterval(id);
-  }, [n, paused]);
+  }, [n, paused, isMobile]);
 
   if (!n) return null;
 
@@ -687,60 +673,81 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="aspect-[16/9] w-full">
+      <div className={cx("w-full", isMobile ? "aspect-[4/3]" : "aspect-[16/9]")}>
         <AnimatePresence mode="wait">
           <motion.img
             key={images[idx]}
             src={images[idx]}
             alt={alt}
-            className="h-full w-full object-cover"
+            className={cx("h-full w-full", isMobile ? "object-contain bg-slate-950/40" : "object-cover")}
             style={{ objectPosition: `50% ${currentY}%`, scale: currentScale }}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.35 }}
-            loading="lazy"
+            transition={{ duration: isMobile ? 0.2 : 0.35 }}
+            loading={idx === 0 ? "eager" : "lazy"}
           />
         </AnimatePresence>
       </div>
 
       {n > 1 && (
         <>
-          <button
-            aria-label="prev"
-            onClick={() => go(-1)}
-            className={cx(
-              "absolute left-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
-              theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
-            )}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            aria-label="next"
-            onClick={() => go(1)}
-            className={cx(
-              "absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
-              theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
-            )}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-
-          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
-            {images.map((_, i) => (
+          {isMobile ? (
+            <div className="flex gap-2 overflow-x-auto border-t border-white/10 bg-slate-950/30 p-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {images.map((image, i) => (
+                <button
+                  key={image}
+                  onClick={() => setIdx(i)}
+                  aria-label={`Ver imagen ${i + 1}`}
+                  aria-current={i === idx}
+                  className={cx(
+                    "h-14 w-20 shrink-0 overflow-hidden rounded-lg border-2 transition",
+                    i === idx ? "border-cyan-300" : "border-transparent opacity-60"
+                  )}
+                >
+                  <img src={image} alt="" className="h-full w-full object-cover" loading="lazy" />
+                </button>
+              ))}
+            </div>
+          ) : (
+            <>
               <button
-                key={i}
-                onClick={() => setIdx(i)}
+                aria-label="Imagen anterior"
+                onClick={() => go(-1)}
                 className={cx(
-                  "h-1.5 rounded-full transition-all",
-                  i === idx ? "w-5" : "w-2",
-                  theme === "dark" ? "bg-cyan-300/80" : "bg-sky-600/80"
+                  "absolute left-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
+                  theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
                 )}
-                aria-label={`slide ${i + 1}`}
-              />
-            ))}
-          </div>
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                aria-label="Siguiente imagen"
+                onClick={() => go(1)}
+                className={cx(
+                  "absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
+                  theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
+                )}
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+
+              <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1.5">
+                {images.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIdx(i)}
+                    className={cx(
+                      "h-1.5 rounded-full transition-all",
+                      i === idx ? "w-5" : "w-2",
+                      theme === "dark" ? "bg-cyan-300/80" : "bg-sky-600/80"
+                    )}
+                    aria-label={`Ver imagen ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
@@ -852,11 +859,11 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
         exit={{ opacity: 0, y: 16 }}
         transition={{ duration: 0.25 }}
         className={cx(
-          "w-full max-w-3xl rounded-3xl p-0 shadow-2xl overflow-hidden",
+          "w-full max-w-3xl max-h-[calc(100dvh-1rem)] overflow-y-auto rounded-3xl p-0 shadow-2xl",
           theme === "dark" ? "border border-slate-700/80 bg-slate-950/80" : "border border-slate-200 bg-white"
         )}
       >
-        <div className={cx("flex items-center gap-3 px-6 py-4", theme === "dark" ? "bg-slate-900/70" : "bg-slate-50")}>
+        <div className={cx("flex items-center gap-3 px-4 py-3 sm:px-6 sm:py-4", theme === "dark" ? "bg-slate-900/70" : "bg-slate-50")}>
           <div
             className={cx(
               "h-11 w-11 overflow-hidden rounded-xl ring-1",
@@ -868,11 +875,11 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           <h3 className={cx("text-lg font-semibold tracking-tight", theme === "dark" ? "text-slate-100" : "text-slate-900")}>{name}</h3>
         </div>
 
-        <div className="px-6 pt-5">
+        <div className="px-4 pt-4 sm:px-6 sm:pt-5">
           <Carousel images={images} alt={name} theme="dark" positions={positions} zoom={zoom} />
         </div>
 
-        <div className={cx("px-6 pt-5 space-y-3 text-[0.95rem] leading-relaxed", theme === "dark" ? "text-slate-300" : "text-slate-700")}>
+        <div className={cx("space-y-3 px-4 pt-4 text-[0.95rem] leading-relaxed sm:px-6 sm:pt-5", theme === "dark" ? "text-slate-300" : "text-slate-700")}>
           {story.map((p, i) => (
             <p key={i} style={clampStyle} title={p}>
               {p}
@@ -902,7 +909,7 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           </div>
         </div>
 
-        <div className="px-6 py-5 flex justify-end">
+        <div className="flex justify-end px-4 py-4 sm:px-6 sm:py-5">
           <button
             onClick={onClose}
             className={cx(
@@ -1119,7 +1126,7 @@ function UsersMini() {
 }
 
 const MARQUEE_LOGOS = [
-  "medifercorp",
+  "medifergroup",
   "velox",
   "mcdonalds",
   "roadster",
@@ -1127,7 +1134,6 @@ const MARQUEE_LOGOS = [
   "rosaclara",
   "promedia",
   "aleph",
-  "paguelofacil",
 ];
 
 /* ───────────────── Carrusel de logos (TRANSPARENTE / sin banda) ───────────────── */
@@ -1137,11 +1143,10 @@ function LogoMarquee({ logos = {} }) {
 
   const LOGO_SCALE = {
     velox: 1.55,
-    paguelofacil: 1.25,
     rosaclara: 1.25,
     promedia: 1.1,
     aleph: 1.15,
-    medifercorp: 1.35,
+    medifergroup: 1.35,
     roadster: 1.2,
     shams: 1.25,
     mcdonalds: 1.05,
@@ -1320,7 +1325,7 @@ export default function YGroupLanding() {
     >
       {/* NAV */}
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 gap-4">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => scrollToEl(topRef)}
@@ -1378,10 +1383,10 @@ export default function YGroupLanding() {
       <div id="top" ref={topRef} />
 
       {/* HERO */}
-      <section className="relative mx-auto w-full max-w-7xl px-6 pb-6 pt-14 md:pt-16">
+      <section className="relative mx-auto w-full max-w-7xl px-4 pb-6 pt-10 sm:px-6 sm:pt-14 md:pt-16">
         <div className={cx("relative overflow-hidden rounded-3xl border", "border-slate-800/60")}>
           <BackgroundFX theme="dark" />
-          <div className="relative grid p-8 md:p-10 items-center md:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] gap-6">
+          <div className="relative grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] md:p-10">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
