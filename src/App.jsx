@@ -1,6 +1,12 @@
 // src/App.jsx
 import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useMotionTemplate,
+} from "framer-motion";
 import Globe from "react-globe.gl";
 import {
   ArrowRight,
@@ -15,6 +21,7 @@ import {
   Mail,
   ChevronLeft,
   ChevronRight,
+  Building2,
 } from "lucide-react";
 
 import BackgroundFX from "./components/BackgroundFX";
@@ -36,7 +43,7 @@ const withUTM = (url, source = "ygroup") => {
 /* ───────────────────────── i18n ──────────────────────────── */
 const COPY = {
   es: {
-    brand: "YGroup",
+    brand: "YYYGroup",
     badge: "Grupo empresarial",
     heroTitle: "Liderando inversiones con impacto en múltiples industrias.",
     heroBody:
@@ -46,8 +53,7 @@ const COPY = {
     contact: "Contacto",
     thanks: "¡Gracias! Tu mensaje fue enviado. Te contactaremos pronto.",
     buildNext: "Construyamos el siguiente movimiento.",
-    writeUs:
-      "Escríbenos y conectamos con el equipo correcto dentro del grupo.",
+    writeUs: "Escríbenos y conectamos con el equipo correcto dentro del grupo.",
     send: "Enviar",
     up: "Arriba",
     close: "Cerrar",
@@ -62,9 +68,14 @@ const COPY = {
     blurb_retail: "Marcas y experiencias para el consumidor.",
     blurb_services: "Soluciones digitales y financieras.",
     view: "Ver",
-    // subtabs retail:
     retail_food_tab: "Food",
     retail_fashion_tab: "Moda",
+
+    // ✅ UPDATE: título en 2 líneas
+    manifestoTitleLine1: "SOMOS UN GRUPO DE INVERSIONISTAS",
+    manifestoTitleLine2: "CON BASE EN PANAMÁ",
+    manifestoBody:
+      "Integramos experiencia real en salud, distribución, retail y servicios para identificar oportunidades, operarlas con disciplina y multiplicar valor.",
   },
   en: {
     brand: "YGroup",
@@ -77,8 +88,7 @@ const COPY = {
     contact: "Contact",
     thanks: "Thanks! Your message was sent. We’ll be in touch soon.",
     buildNext: "Let’s build the next move.",
-    writeUs:
-      "Write to us and we’ll connect you with the right team in the group.",
+    writeUs: "Write to us and we’ll connect you with the right team in the group.",
     send: "Send",
     up: "Top",
     close: "Close",
@@ -95,6 +105,12 @@ const COPY = {
     view: "View",
     retail_food_tab: "Food",
     retail_fashion_tab: "Fashion",
+
+    // ✅ UPDATE: equivalente en 2 líneas
+    manifestoTitleLine1: "WE’RE A PANAMA-BASED",
+    manifestoTitleLine2: "INVESTMENT GROUP",
+    manifestoBody:
+      "We bring real operating experience across healthcare, distribution, retail and services to identify opportunities, execute with discipline, and compound value.",
   },
 };
 
@@ -103,7 +119,7 @@ const LOGOS = {
   regenerationclinicpanama: "/logos/healthcare/regeneration-clinic-panama.png",
   drsalud: "/logos/healthcare/dr-salud.png",
   iseeoptics: "/logos/healthcare/i-see-optics.png",
-  medifercorp: "/logos/healthcare/medifer.png",
+  medifergroup: "/logos/healthcare/medifer.png",
 
   aleph: "/logos/distribution/aleph.png",
   velox: "/logos/distribution/velox.png",
@@ -186,21 +202,23 @@ const COMPANIES = {
       "/images/companies/iseeoptics/5.jpg",
     ],
   },
-  medifercorp: {
-    name: { es: "MediferCorp", en: "MediferCorp" },
+  medifergroup: {
+    name: { es: "Medifer Group", en: "Medifer Group" },
     story: {
       es: [
-        "Comercialización de productos médicos con foco en disponibilidad y cumplimiento.",
-        "Trazabilidad y almacenamiento seguro no negociables.",
+        "Distribución de productos farmacéuticos y de salud en Latam, con foco en estrategias de marca.",
       ],
       en: [
-        "Medical products distribution focused on availability and compliance.",
-        "Traceability and safe storage are non-negotiable.",
+        "Distribution of pharmaceutical and health products in Latin America, with a focus on brand strategies.",
       ],
     },
     contacts: {},
     url: "#",
-    images: ["/companies/medifercorp/1.jpg"],
+    images: [
+      "/companies/medifergroup/1.webp",
+      "/companies/medifergroup/2.webp",
+      "/companies/medifergroup/3.webp",
+    ],
   },
 
   aleph: {
@@ -259,10 +277,7 @@ const COMPANIES = {
   montevito: {
     name: { es: "Montevito", en: "Montevito" },
     story: {
-      es: [
-        "Vitrina de alimentos y bebidas con curaduría.",
-        "Selección cuidada y disponibilidad confiable.",
-      ],
+      es: ["Vitrina de alimentos y bebidas con curaduría.", "Selección cuidada y disponibilidad confiable."],
       en: ["Curated food & beverage store.", "Careful selection with dependable availability."],
     },
     contacts: {},
@@ -295,14 +310,8 @@ const COMPANIES = {
   roadster: {
     name: { es: "Roadster Diner", en: "Roadster Diner" },
     story: {
-      es: [
-        "Restaurante estilo diner con ambiente que invita a quedarse.",
-        "Clásicos reconfortantes con ejecución consistente.",
-      ],
-      en: [
-        "Diner-style restaurant with a stay-long vibe.",
-        "Comfort classics with consistent execution.",
-      ],
+      es: ["Restaurante estilo diner con ambiente que invita a quedarse.", "Clásicos reconfortantes con ejecución consistente."],
+      en: ["Diner-style restaurant with a stay-long vibe.", "Comfort classics with consistent execution."],
     },
     contacts: { instagram: "https://www.instagram.com/roadstersdinerpty/?hl=es" },
     url: "#",
@@ -317,18 +326,12 @@ const COMPANIES = {
   shams: {
     name: { es: "Shams Market", en: "Shams Market" },
     story: {
-      es: [
-        "Retail orientado al cuidado personal y la belleza cotidiana.",
-        "Marcas confiables y experiencia para descubrir sin prisa.",
-      ],
-      en: [
-        "Retail concept for everyday self-care and beauty.",
-        "Trusted brands and an experience for unhurried discovery.",
-      ],
+      es: ["Retail orientado al cuidado personal y la belleza cotidiana.", "Marcas confiables y experiencia para descubrir sin prisa."],
+      en: ["Retail concept for everyday self-care and beauty.", "Trusted brands and an experience for unhurried discovery."],
     },
     contacts: {},
     url: "#",
-    images: ["/images/companies/shams/1.jpeg", "/images/companies/shams/2.jpeg" ],
+    images: ["/images/companies/shams/1.jpeg", "/images/companies/shams/2.jpeg"],
   },
   rosaclara: {
     name: { es: "Rosa Clara", en: "Rosa Clará" },
@@ -357,14 +360,8 @@ const COMPANIES = {
   promedia: {
     name: { es: "Promedia", en: "Promedia" },
     story: {
-      es: [
-        "Agencia 360° que empuja ideas hasta convertirlas en resultados.",
-        "Estrategia, creatividad, producción y performance en un flujo.",
-      ],
-      en: [
-        "360° marketing agency that pushes ideas into results.",
-        "Strategy, creativity, production and performance in one flow.",
-      ],
+      es: ["Agencia 360° que empuja ideas hasta convertirlas en resultados.", "Estrategia, creatividad, producción y performance en un flujo."],
+      en: ["360° marketing agency that pushes ideas into results.", "Strategy, creativity, production and performance in one flow."],
     },
     contacts: { web: "https://www.promediapublicidad.com/" },
     url: "https://www.promediapublicidad.com/",
@@ -400,36 +397,36 @@ const COMPANIES = {
 /* ───── Ajustes de imagen ───── */
 const IMAGE_CROP = {
   regenerationclinicpanama: [50, 47, 68, 50, 43],
-  drsalud:                  [50, 50, 38, 40, 40],
-  iseeoptics:               [56, 50, 50, 50, 50],
-  medifercorp:              [50],
-  aleph:                    [50, 50, 50, 50, 40],
-  velox:                    [8],
-  dyoni:                    [50, 50],
-  montevito:                [50],
-  mcdonalds:                [50, 50, 50, 50, 50],
-  roadster:                 [67, 30, 90, 50, 50],
-  shams:                    [50],
-  rosaclara:                [15, 40, 35, 25, 50],
-  promedia:                 [50, 50, 50, 38, 50],
-  paguelofacil:             [50, 50, 50, 50, 50],
+  drsalud: [50, 50, 38, 40, 40],
+  iseeoptics: [56, 50, 50, 50, 50],
+  medifercorp: [50],
+  aleph: [50, 50, 50, 50, 40],
+  velox: [8],
+  dyoni: [50, 50],
+  montevito: [50],
+  mcdonalds: [50, 50, 50, 50, 50],
+  roadster: [67, 30, 90, 50, 50],
+  shams: [50],
+  rosaclara: [15, 40, 35, 25, 50],
+  promedia: [50, 50, 50, 38, 50],
+  paguelofacil: [50, 50, 50, 50, 50],
 };
 
 const IMAGE_ZOOM = {
   regenerationclinicpanama: [1, 1, 1, 1, 1],
-  drsalud:                  [1, 1, 1, 1, 1],
-  iseeoptics:               [1, 1, 1, 1, 1],
-  medifercorp:              [1],
-  aleph:                    [1, 1, 1, 1, 1],
-  velox:                    [1],
-  dyoni:                    [1, 1],
-  montevito:                [1],
-  mcdonalds:                [1, 1, 1, 1, 1],
-  roadster:                 [1, 1, 1, 1, 1],
-  shams:                    [1],
-  rosaclara:                [1, 1, 1, 1, 1],
-  promedia:                 [1, 1, 1, 1, 1],
-  paguelofacil:             [1, 1, 1, 1, 1],
+  drsalud: [1, 1, 1, 1, 1],
+  iseeoptics: [1, 1, 1, 1, 1],
+  medifercorp: [1],
+  aleph: [1, 1, 1, 1, 1],
+  velox: [1],
+  dyoni: [1, 1],
+  montevito: [1],
+  mcdonalds: [1, 1, 1, 1, 1],
+  roadster: [1, 1, 1, 1, 1],
+  shams: [1],
+  rosaclara: [1, 1, 1, 1, 1],
+  promedia: [1, 1, 1, 1, 1],
+  paguelofacil: [1, 1, 1, 1, 1],
 };
 
 /* ───────── CATEGORÍAS (retail único a nivel superior) ───────── */
@@ -453,7 +450,6 @@ const CATEGORIES = [
     icon: ShoppingBag,
     title: { es: COPY.es.cat_retail, en: COPY.en.cat_retail },
     blurb: { es: COPY.es.blurb_retail, en: COPY.en.blurb_retail },
-    // Nota: internamente se subdivide; acá no listamos companies.
     companies: [],
   },
   {
@@ -482,14 +478,13 @@ const Badge = ({ children, theme }) => (
 /* ───────── DiagonalLanding ───────── */
 function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
   const isDark = theme === "dark";
-  const t = COPY[lang];
-  const [hover, setHover] = React.useState(null);
+  const [hover, setHover] = useState(null);
 
   const titleColorIdle = isDark ? "text-slate-100/95" : "text-slate-900";
   const blurbColorIdle = isDark ? "text-slate-300/75" : "text-slate-600";
-  const iconWrapIdle   = isDark ? "bg-sky-500/10 ring-1 ring-sky-300/30"
-                                : "bg-sky-100 ring-1 ring-sky-300/60";
-  const iconColorIdle  = isDark ? "text-sky-200" : "text-sky-700";
+  const iconWrapIdle =
+    isDark ? "bg-sky-500/10 ring-1 ring-sky-300/30" : "bg-sky-100 ring-1 ring-sky-300/60";
+  const iconColorIdle = isDark ? "text-sky-200" : "text-sky-700";
 
   const sectionBg = isDark
     ? "bg-[linear-gradient(180deg,#0b1220_0%,#0f172a_100%)]"
@@ -526,9 +521,7 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
               />
 
               <div className="absolute inset-y-0 right-0 w-px" style={{ backgroundColor: EDGE_COLOR }} />
-              {i === 0 && (
-                <div className="absolute inset-y-0 left-0 w-px" style={{ backgroundColor: EDGE_COLOR }} />
-              )}
+              {i === 0 && <div className="absolute inset-y-0 left-0 w-px" style={{ backgroundColor: EDGE_COLOR }} />}
 
               <motion.div
                 className="absolute inset-0 pointer-events-none"
@@ -550,9 +543,9 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
                       scale: hover === i ? 1.06 : 1,
                       boxShadow:
                         hover === i
-                          ? (isDark
-                              ? "0 0 24px rgba(56,189,248,.28)"
-                              : "0 0 24px rgba(2,132,199,.30)")
+                          ? isDark
+                            ? "0 0 24px rgba(56,189,248,.28)"
+                            : "0 0 24px rgba(2,132,199,.30)"
                           : "0 0 0 rgba(0,0,0,0)",
                     }}
                     transition={{ duration: 0.22 }}
@@ -562,18 +555,13 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
 
                   <motion.h3
                     className={`text-lg font-semibold transition-colors ${titleColorIdle}`}
-                    animate={{
-                      color:
-                        hover === i
-                          ? (isDark ? "#a5f3fc" : "#0369a1")
-                          : undefined,
-                    }}
+                    animate={{ color: hover === i ? (isDark ? "#a5f3fc" : "#0369a1") : undefined }}
                     style={{
                       textShadow:
                         hover === i
-                          ? (isDark
-                              ? "0 0 14px rgba(56,189,248,.65)"
-                              : "0 0 14px rgba(2,132,199,.45)")
+                          ? isDark
+                            ? "0 0 14px rgba(56,189,248,.65)"
+                            : "0 0 14px rgba(2,132,199,.45)"
                           : "none",
                     }}
                   >
@@ -600,11 +588,12 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
               key={cat.id}
               onClick={() => onPick?.(cat.id)}
               whileTap={{ scale: 0.98 }}
-              className={`relative overflow-hidden rounded-2xl p-4 text-left ${
+              className={cx(
+                "relative overflow-hidden rounded-2xl p-4 text-left",
                 isDark
-                  ? "border border-white/10 bg-[rgba(13,23,38,0.9)]"
+                  ? "bg-[rgba(13,23,38,0.9)]"
                   : "border border-slate-200 bg-[rgba(255,255,255,0.96)]"
-              }`}
+              )}
             >
               <div className="flex items-center gap-3">
                 <div className={`grid h-12 w-12 place-items-center rounded-xl ${iconWrapIdle}`}>
@@ -626,7 +615,7 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
           className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg shadow-cyan-500/20"
           onClick={() => onPick?.("healthcare")}
         >
-          {t.viewPortfolio} <ArrowRight className="h-4 w-4" />
+          {COPY[lang].viewPortfolio} <ArrowRight className="h-4 w-4" />
         </button>
       </div>
     </section>
@@ -635,15 +624,14 @@ function DiagonalLanding({ theme = "dark", lang = "es", onPick }) {
 
 /* ───────── Globo en HERO ─────── */
 function HeroGlobe({ size = 520, cyan = "#45e6ff" }) {
-  const ref = React.useRef(null);
+  const ref = useRef(null);
   useEffect(() => {
     const g = ref.current;
     if (!g) return;
     const ctrls = g.controls?.();
     if (ctrls) {
-      // Invertimos sentido y subimos velocidad
       ctrls.autoRotate = true;
-      ctrls.autoRotateSpeed = -0.65; // negativo = sentido contrario
+      ctrls.autoRotateSpeed = -0.65;
       ctrls.enableZoom = false;
       ctrls.enablePan = false;
     }
@@ -695,10 +683,7 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
 
   return (
     <div
-      className={cx(
-        "relative overflow-hidden rounded-2xl",
-        theme === "dark" ? "bg-slate-900/40" : "bg-slate-100"
-      )}
+      className={cx("relative overflow-hidden rounded-2xl", theme === "dark" ? "bg-slate-900/40" : "bg-slate-100")}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -726,9 +711,7 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
             onClick={() => go(-1)}
             className={cx(
               "absolute left-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
-              theme === "dark"
-                ? "bg-black/30 text-white hover:bg-black/50"
-                : "bg-white/70 text-slate-700 hover:bg-white"
+              theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
             )}
           >
             <ChevronLeft className="h-5 w-5" />
@@ -738,9 +721,7 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
             onClick={() => go(1)}
             className={cx(
               "absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full p-1.5 backdrop-blur",
-              theme === "dark"
-                ? "bg-black/30 text-white hover:bg-black/50"
-                : "bg-white/70 text-slate-700 hover:bg-white"
+              theme === "dark" ? "bg-black/30 text-white hover:bg-black/50" : "bg-white/70 text-slate-700 hover:bg-white"
             )}
           >
             <ChevronRight className="h-5 w-5" />
@@ -768,10 +749,9 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
 
 /* ───────────────── Retail con subtabs internos ───────────── */
 function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onClose }) {
-  const [sub, setSub] = useState("food"); // "food" | "fashion"
+  const [sub, setSub] = useState("food");
   const t = COPY[lang];
 
-  // Por ahora: Food = mcdonalds, roadster, shams ; Fashion = rosaclara
   const FOOD = ["mcdonalds", "roadster", "shams"];
   const FASHION = ["rosaclara"];
 
@@ -779,44 +759,32 @@ function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onCl
   const TitleIcon = ShoppingBag;
 
   return (
-    <div className={cx(
-      "rounded-3xl overflow-hidden",
-      theme === "dark" ? "border border-slate-800/60" : "border border-slate-200 bg-white"
-    )}>
-      {/* Header + tabs */}
-      <div className={cx(
-        "flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between",
-        theme === "dark" ? "bg-slate-900/40" : "bg-slate-50"
-      )}>
+    <div className={cx("rounded-3xl overflow-hidden", theme === "dark" ? "border border-slate-800/60" : "border border-slate-200 bg-white")}>
+      <div className={cx("flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between", theme === "dark" ? "bg-slate-900/40" : "bg-slate-50")}>
         <div className="flex items-center gap-3">
-          <div className={cx(
-            "grid h-10 w-10 place-items-center rounded-xl ring-1",
-            theme === "dark" ? "ring-sky-400/40 bg-sky-500/10" : "ring-sky-300/60 bg-sky-100"
-          )}>
+          <div className={cx("grid h-10 w-10 place-items-center rounded-xl ring-1", theme === "dark" ? "ring-sky-400/40 bg-sky-500/10" : "ring-sky-300/60 bg-sky-100")}>
             <TitleIcon className={cx("h-5 w-5", theme === "dark" ? "text-sky-200" : "text-sky-700")} />
           </div>
           <div>
             <h2 className={cx("text-lg font-semibold", theme === "dark" ? "text-slate-100" : "text-slate-900")}>
               {COPY[lang].cat_retail}
             </h2>
-            <p className={cx("text-xs", theme === "dark" ? "text-slate-400" : "text-slate-600")}>
-              {COPY[lang].blurb_retail}
-            </p>
+            <p className={cx("text-xs", theme === "dark" ? "text-slate-400" : "text-slate-600")}>{COPY[lang].blurb_retail}</p>
           </div>
         </div>
 
-        {/* Subtabs */}
-        <div className={cx(
-          "inline-flex rounded-xl p-1",
-          theme === "dark" ? "bg-slate-800/60 border border-slate-700" : "bg-white border border-slate-200 shadow-sm"
-        )}>
+        <div className={cx("inline-flex rounded-xl p-1", theme === "dark" ? "bg-slate-800/60 border border-slate-700" : "bg-white border border-slate-200 shadow-sm")}>
           <button
             onClick={() => setSub("food")}
             className={cx(
               "px-3 py-1.5 text-xs rounded-lg",
               sub === "food"
-                ? (theme === "dark" ? "bg-sky-500/20 text-sky-200" : "bg-sky-100 text-sky-700")
-                : (theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900")
+                ? theme === "dark"
+                  ? "bg-sky-500/20 text-sky-200"
+                  : "bg-sky-100 text-sky-700"
+                : theme === "dark"
+                ? "text-slate-300 hover:text-white"
+                : "text-slate-600 hover:text-slate-900"
             )}
           >
             {t.retail_food_tab}
@@ -826,8 +794,12 @@ function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onCl
             className={cx(
               "px-3 py-1.5 text-xs rounded-lg",
               sub === "fashion"
-                ? (theme === "dark" ? "bg-sky-500/20 text-sky-200" : "bg-sky-100 text-sky-700")
-                : (theme === "dark" ? "text-slate-300 hover:text-white" : "text-slate-600 hover:text-slate-900")
+                ? theme === "dark"
+                  ? "bg-sky-500/20 text-sky-200"
+                  : "bg-sky-100 text-sky-700"
+                : theme === "dark"
+                ? "text-slate-300 hover:text-white"
+                : "text-slate-600 hover:text-slate-900"
             )}
           >
             {t.retail_fashion_tab}
@@ -835,7 +807,6 @@ function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onCl
         </div>
       </div>
 
-      {/* Grid reutilizando CategoryOpen para el listado */}
       <CategoryOpen
         title={COPY[lang].cat_retail}
         blurb={COPY[lang].blurb_retail}
@@ -855,13 +826,12 @@ function RetailCategoryOpen({ theme, lang, logos, companies, onOpenCompany, onCl
 /* ───────────────────────── Modales ──────────────────────── */
 function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
   if (!companyId) return null;
-  const t = COPY[lang];
   const c = COMPANIES[companyId];
   const name = c?.name?.[lang] ?? companyId;
   const story = c?.story?.[lang] ?? [];
   const contacts = c?.contacts ?? {};
   const logo = LOGOS[companyId];
-  const images = c?.images?.length ? c.images : (logo ? [logo] : []);
+  const images = c?.images?.length ? c.images : logo ? [logo] : [];
 
   const clampStyle = {
     display: "-webkit-box",
@@ -886,11 +856,7 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           theme === "dark" ? "border border-slate-700/80 bg-slate-950/80" : "border border-slate-200 bg-white"
         )}
       >
-        {/* Header */}
-        <div className={cx(
-          "flex items-center gap-3 px-6 py-4",
-          theme === "dark" ? "bg-slate-900/70" : "bg-slate-50"
-        )}>
+        <div className={cx("flex items-center gap-3 px-6 py-4", theme === "dark" ? "bg-slate-900/70" : "bg-slate-50")}>
           <div
             className={cx(
               "h-11 w-11 overflow-hidden rounded-xl ring-1",
@@ -899,17 +865,13 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           >
             <img src={logo} alt={`${name} logo`} className="h-full w-full object-contain" />
           </div>
-          <h3 className={cx("text-lg font-semibold tracking-tight", theme === "dark" ? "text-slate-100" : "text-slate-900")}>
-            {name}
-          </h3>
+          <h3 className={cx("text-lg font-semibold tracking-tight", theme === "dark" ? "text-slate-100" : "text-slate-900")}>{name}</h3>
         </div>
 
-        {/* Carrusel */}
         <div className="px-6 pt-5">
           <Carousel images={images} alt={name} theme="dark" positions={positions} zoom={zoom} />
         </div>
 
-        {/* copy + links */}
         <div className={cx("px-6 pt-5 space-y-3 text-[0.95rem] leading-relaxed", theme === "dark" ? "text-slate-300" : "text-slate-700")}>
           {story.map((p, i) => (
             <p key={i} style={clampStyle} title={p}>
@@ -940,7 +902,6 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
           </div>
         </div>
 
-        {/* acciones */}
         <div className="px-6 py-5 flex justify-end">
           <button
             onClick={onClose}
@@ -951,7 +912,7 @@ function CompanyModal({ companyId, onClose, theme = "dark", lang = "es" }) {
                 : "border border-slate-300 text-slate-700 hover:bg-slate-50"
             )}
           >
-            {t.close}
+            {COPY[lang].close}
           </button>
         </div>
       </motion.div>
@@ -991,9 +952,7 @@ const Footer = ({ onGoTop, theme, lang }) => (
           {lang === "es" ? "¿Tienes un proyecto estratégico?" : "Got a strategic project?"}
         </p>
         <p className={cx("text-xs", theme === "dark" ? "text-slate-500" : "text-slate-600")}>
-          {lang === "es"
-            ? "Conversemos sobre cómo YGroup puede potenciarlo."
-            : "Let’s talk about how YGroup can boost it."}
+          {lang === "es" ? "Conversemos sobre cómo YGroup puede potenciarlo." : "Let’s talk about how YGroup can boost it."}
         </p>
       </div>
       <a
@@ -1005,8 +964,7 @@ const Footer = ({ onGoTop, theme, lang }) => (
     </div>
     <div className="mt-8 flex flex-col items-center justify-between gap-4 text-xs text-slate-500 md:flex-row">
       <span>
-        © {new Date().getFullYear()} YGroup.{" "}
-        {lang === "es" ? "Todos los derechos reservados." : "All rights reserved."}
+        © {new Date().getFullYear()} YGroup. {lang === "es" ? "Todos los derechos reservados." : "All rights reserved."}
       </span>
       <button
         onClick={onGoTop}
@@ -1046,14 +1004,288 @@ const ThankYouBanner = ({ theme, lang }) => {
   );
 };
 
+/* ───────────────────────── Banda animada ───────────────────────── */
+function StickyManifesto({ lang = "es" }) {
+  const ref = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const p = useTransform(scrollYProgress, [0.15, 0.8], [0, 1]);
+  const pClamped = useTransform(p, (v) => Math.max(0, Math.min(1, v)));
+
+  const clipRight = useTransform(pClamped, (v) => `${Math.round((1 - v) * 100)}%`);
+  const titleClip = useMotionTemplate`inset(0 ${clipRight} 0 0)`;
+
+  const lineScale = useTransform(pClamped, [0, 1], [0, 1]);
+
+  const bodyOpacity = useTransform(scrollYProgress, [0.35, 0.75], [0, 1]);
+  const bodyY = useTransform(scrollYProgress, [0.35, 0.75], [10, 0]);
+  const bodyBlur = useTransform(scrollYProgress, [0.35, 0.75], [10, 0]);
+  const bodyFilter = useMotionTemplate`blur(${bodyBlur}px)`;
+
+  return (
+    <section ref={ref} className="mx-auto w-full max-w-7xl px-6 pb-6">
+      <div className="relative min-h-[240px] md:min-h-[290px]">
+        <div className="sticky top-[84px] md:top-[92px]">
+          <div className="pointer-events-none absolute -inset-x-10 -inset-y-10 bg-[radial-gradient(60%_50%_at_50%_40%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(40%_40%_at_20%_20%,rgba(34,211,238,0.08),transparent_55%)] blur-2xl" />
+
+          <div className="relative">
+            <div className="relative h-[2px] w-full overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                className="h-full w-full origin-left"
+                style={{
+                  scaleX: lineScale,
+                  background:
+                    "linear-gradient(90deg, rgba(56,189,248,0.0), rgba(56,189,248,0.9), rgba(34,211,238,0.9), rgba(56,189,248,0.0))",
+                }}
+              />
+              <motion.div
+                className="absolute inset-0"
+                style={{
+                  opacity: 0.35,
+                  background:
+                    "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)",
+                  transform: "translate3d(-40%,0,0)",
+                }}
+                animate={{ transform: "translate3d(40%,0,0)" }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
+
+            {/* ✅ UPDATE: título en 2 filas + más grande/notable */}
+            <div className="mt-4 md:mt-5">
+              <div className="relative">
+                {/* base tenue */}
+                <div
+                  className="font-semibold uppercase tracking-[0.18em] text-slate-400/60"
+                  style={{
+                    fontSize: "clamp(1.25rem, 2.2vw, 2.1rem)",
+                    lineHeight: 1.05,
+                    textShadow: "0 0 10px rgba(56,189,248,.08)",
+                  }}
+                >
+                  <span className="block">{COPY[lang].manifestoTitleLine1}</span>
+                  <span className="block">{COPY[lang].manifestoTitleLine2}</span>
+                </div>
+
+                {/* capa revelada */}
+                <motion.div className="absolute inset-0" style={{ clipPath: titleClip }}>
+                  <div
+                    className="font-semibold uppercase tracking-[0.18em] text-slate-100"
+                    style={{
+                      fontSize: "clamp(1.25rem, 2.2vw, 2.1rem)",
+                      lineHeight: 1.05,
+                      textShadow: "0 0 18px rgba(56,189,248,.22)",
+                    }}
+                  >
+                    <span className="block">{COPY[lang].manifestoTitleLine1}</span>
+                    <span className="block">{COPY[lang].manifestoTitleLine2}</span>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Body (sin cambios) */}
+              <p className="mt-3 max-w-3xl text-sm md:text-base leading-relaxed text-slate-300/85">
+  {COPY[lang].manifestoBody}
+</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────────────────── NEW: Info + Logos (sin bordes raros) ───────────────────────── */
+function TrendMini() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-cyan-200">
+      <path d="M4 16l6-6 4 4 6-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M20 8v6h-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+function UsersMini() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" className="text-cyan-200">
+      <path d="M4 19c0-3 4-4 8-4s8 1 8 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M12 12a4 4 0 1 0-0.001 0Z" stroke="currentColor" strokeWidth="2" />
+      <path d="M16 19c0-2 2-3 4-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+const MARQUEE_LOGOS = [
+  "medifercorp",
+  "velox",
+  "mcdonalds",
+  "roadster",
+  "shams",
+  "rosaclara",
+  "promedia",
+  "aleph",
+  "paguelofacil",
+];
+
+/* ───────────────── Carrusel de logos (TRANSPARENTE / sin banda) ───────────────── */
+function LogoMarquee({ logos = {} }) {
+  const list = MARQUEE_LOGOS.map((id) => ({ id, src: logos[id] })).filter((x) => Boolean(x.src));
+  const loop = [...list, ...list];
+
+  const LOGO_SCALE = {
+    velox: 1.55,
+    paguelofacil: 1.25,
+    rosaclara: 1.25,
+    promedia: 1.1,
+    aleph: 1.15,
+    medifercorp: 1.35,
+    roadster: 1.2,
+    shams: 1.25,
+    mcdonalds: 1.05,
+  };
+
+  return (
+    <div className="relative w-full">
+      <style>{`
+        @keyframes ygroup-marquee {
+          0% { transform: translate3d(0,0,0); }
+          100% { transform: translate3d(-50%,0,0); }
+        }
+      `}</style>
+
+      <div className="relative overflow-hidden">
+        <div
+          className="relative"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+            maskImage:
+              "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
+          }}
+        >
+          <div
+            className="flex w-[200%] items-center gap-10 md:gap-14 py-2"
+            style={{ animation: "ygroup-marquee 24s linear infinite" }}
+          >
+            {loop.map((x, i) => {
+              const s = LOGO_SCALE[x.id] ?? 1;
+              return (
+                <div key={`${x.id}-${i}`} className="flex min-w-[190px] md:min-w-[260px] items-center justify-center">
+                  <motion.img
+                    src={x.src}
+                    alt={x.id}
+                    loading="lazy"
+                    className="block w-auto object-contain select-none"
+                    style={{
+                      height: "clamp(24px, 3.4vw, 48px)",
+                      transform: `scale(${s})`,
+                      transformOrigin: "center",
+                      opacity: 0.88,
+                      filter:
+                        "drop-shadow(0 12px 28px rgba(0,0,0,0.55)) drop-shadow(0 0 10px rgba(56,189,248,0.10))",
+                    }}
+                    whileHover={{
+                      opacity: 1,
+                      y: -2,
+                      filter:
+                        "drop-shadow(0 18px 40px rgba(0,0,0,0.70)) drop-shadow(0 0 18px rgba(56,189,248,0.22))",
+                    }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    draggable={false}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ───────────────── Bloque info + logos (misma atmósfera del fondo) ───────────────── */
+function InfoAndLogos({ theme = "dark", lang = "es", logos = {} }) {
+  const FEATURES = [
+    {
+      title: lang === "es" ? "Administración profesional" : "Professional administration",
+      desc: lang === "es" ? "diverso" : "diverse",
+      icon: "building",
+    },
+    {
+      title: lang === "es" ? "Rentabilidad maximizada" : "Maximized returns",
+      desc: lang === "es" ? "optimización y escala" : "optimization & scale",
+      icon: "trend",
+    },
+    {
+      title: lang === "es" ? "Expertos en cada sector" : "Experts in every sector",
+      desc: lang === "es" ? "ejecución real" : "real execution",
+      icon: "users",
+    },
+  ];
+
+  return (
+    <section className="mx-auto w-full max-w-7xl px-6 pb-10">
+      <div className="relative">
+        <div className="pointer-events-none absolute -inset-x-8 -inset-y-10 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(40%_40%_at_20%_30%,rgba(34,211,238,0.08),transparent_60%)] blur-2xl" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="grid gap-3 md:grid-cols-3"
+        >
+          {FEATURES.map((f, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.45, delay: 0.06 * idx }}
+              className="flex items-center gap-3 rounded-2xl bg-white/[0.03] px-4 py-4 backdrop-blur-md shadow-[0_18px_55px_rgba(0,0,0,0.45)]"
+            >
+              <div className="grid h-11 w-11 place-items-center rounded-2xl bg-cyan-400/10">
+                {f.icon === "building" && <Building2 className="h-6 w-6 text-cyan-200" />}
+                {f.icon === "trend" && <TrendMini />}
+                {f.icon === "users" && <UsersMini />}
+              </div>
+
+              <div>
+                <div className="text-sm font-semibold text-slate-100">{f.title}</div>
+                <div className="text-xs text-slate-400">{f.desc}</div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.55, ease: "easeOut", delay: 0.06 }}
+          className="mt-4"
+        >
+          <LogoMarquee logos={logos} />
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 /* ───────────────────────────── App ───────────────────────── */
 export default function YGroupLanding() {
   const theme = "dark"; // 🔒 siempre oscuro
   const [lang, setLang] = useState("es");
-  const [activeCat, setActiveCat] = useState("all"); // "all" | categoryId
-  const [selected, setSelected] = useState(null); // companyId
+  const [activeCat, setActiveCat] = useState("all");
+  const [selected, setSelected] = useState(null);
 
-  const t = COPY[lang];
+  const topRef = useRef(null);
+  const portfolioRef = useRef(null);
+  const contactoRef = useRef(null);
+  const emailRef = useRef(null);
 
   useEffect(() => {
     try {
@@ -1067,15 +1299,10 @@ export default function YGroupLanding() {
     } catch {}
   }, [lang]);
 
-
   useEffect(() => {
     document.documentElement.setAttribute("lang", lang);
   }, [lang]);
 
-  const topRef = useRef(null);
-  const portfolioRef = useRef(null);
-  const contactoRef = useRef(null);
-  const emailRef = useRef(null);
   const scrollToEl = (el, opts = { focusEmail: false }) => {
     if (!el?.current) return;
     const y = el.current.getBoundingClientRect().top + window.scrollY - 80;
@@ -1084,29 +1311,17 @@ export default function YGroupLanding() {
     if (opts.focusEmail) setTimeout(() => emailRef.current?.focus(), 300);
   };
 
+  const t = COPY[lang];
+
   return (
     <div
-    data-theme="dark"
-    className="min-h-screen w-full text-slate-100 bg-[radial-gradient(80%_60%_at_50%_-10%,rgba(56,189,248,0.15),transparent_60%),radial-gradient(60%_50%_at_80%_10%,rgba(34,211,238,0.10),transparent_60%),linear-gradient(180deg,#0f172a,#0b1220)]"
-  >
+      data-theme="dark"
+      className="min-h-screen w-full text-slate-100 bg-[radial-gradient(80%_60%_at_50%_-10%,rgba(56,189,248,0.15),transparent_60%),radial-gradient(60%_50%_at_80%_10%,rgba(34,211,238,0.10),transparent_60%),linear-gradient(180deg,#0f172a,#0b1220)]"
+    >
       {/* NAV */}
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-900/40">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-4 gap-4">
-          {/* Brand */}
           <div className="flex items-center gap-3">
-            <div
-              className={cx(
-              )}
-            >
-              <span
-                className={cx(
-                  "text-sm font-extrabold tracking-widest",
-                  theme === "dark" ? "text-slate-900 mix-blend-screen" : "text-slate-800"
-                )}
-              >
-                
-              </span>
-            </div>
             <button
               onClick={() => scrollToEl(topRef)}
               className={cx("text-sm font-semibold", theme === "dark" ? "text-slate-200" : "text-slate-800")}
@@ -1115,9 +1330,8 @@ export default function YGroupLanding() {
             </button>
           </div>
 
-          {/* NAV categories */}
           <nav className="hidden lg:flex items-center gap-2">
-            {[{ id: "all", title: COPY[lang].all }, ...CATEGORIES.map(c => ({ id: c.id, title: c.title[lang] }))].map(
+            {[{ id: "all", title: COPY[lang].all }, ...CATEGORIES.map((c) => ({ id: c.id, title: c.title[lang] }))].map(
               (c) => (
                 <button
                   key={c.id}
@@ -1128,12 +1342,8 @@ export default function YGroupLanding() {
                   className={cx(
                     "rounded-xl px-3 py-1.5 text-sm transition",
                     activeCat === c.id
-                      ? theme === "dark"
-                        ? "bg-sky-500/20 text-sky-200 ring-1 ring-inset ring-sky-400/40"
-                        : "bg-sky-100 text-sky-700 ring-1 ring-inset ring-sky-300/60"
-                      : theme === "dark"
-                      ? "text-slate-300 hover:text-white"
-                      : "text-slate-600 hover:text-slate-900"
+                      ? "bg-sky-500/20 text-sky-200 ring-1 ring-inset ring-sky-400/40"
+                      : "text-slate-300 hover:text-white"
                   )}
                 >
                   {c.title}
@@ -1142,35 +1352,22 @@ export default function YGroupLanding() {
             )}
           </nav>
 
-          {/* idioma + CTA */}
           <div className="flex items-center gap-2">
-            {/* Idioma (ahora visible también en móvil) */}
             <div className="flex items-center rounded-xl border px-1 py-0.5 text-xs border-slate-800 bg-slate-900/50 text-slate-200">
               {["es", "en"].map((code) => (
                 <button
                   key={code}
                   onClick={() => setLang(code)}
-                   className={cx(
-            "px-2 py-1 rounded-lg",
-            lang === code ? "bg-sky-500/20 text-sky-200" : "opacity-70 hover:opacity-100"
-             )}
+                  className={cx("px-2 py-1 rounded-lg", lang === code ? "bg-sky-500/20 text-sky-200" : "opacity-70 hover:opacity-100")}
                 >
                   {code.toUpperCase()}
                 </button>
               ))}
             </div>
 
-            {/* (tema eliminado: solo dark) */}
-
-            {/* CTA */}
             <button
               onClick={() => scrollToEl(contactoRef, { focusEmail: true })}
-              className={cx(
-                "rounded-xl px-3 py-1.5 text-xs",
-                theme === "dark"
-                  ? "border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
-                  : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-              )}
+              className="rounded-xl px-3 py-1.5 text-xs border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
             >
               {t.talk}
             </button>
@@ -1178,16 +1375,13 @@ export default function YGroupLanding() {
         </div>
       </header>
 
-      {/* TOP anchor */}
       <div id="top" ref={topRef} />
 
       {/* HERO */}
-      <section className="relative mx-auto w-full max-w-7xl px-6 pb-10 pt-14 md:pt-16">
-        <div className={cx("relative overflow-hidden rounded-3xl border",
-          theme === "dark" ? "border-slate-800/60" : "border-slate-300/80")}>
+      <section className="relative mx-auto w-full max-w-7xl px-6 pb-6 pt-14 md:pt-16">
+        <div className={cx("relative overflow-hidden rounded-3xl border", "border-slate-800/60")}>
           <BackgroundFX theme="dark" />
           <div className="relative grid p-8 md:p-10 items-center md:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] gap-6">
-            {/* texto */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1209,11 +1403,7 @@ export default function YGroupLanding() {
                 {COPY[lang].heroTitle}
               </h1>
 
-              <p
-                className={cx("text-sm md:text-base",
-                  theme === "dark" ? "text-slate-300/85" : "text-slate-600")}
-                style={{ maxWidth: "40ch", margin: 0 }}
-              >
+              <p className="text-sm md:text-base text-slate-300/85" style={{ maxWidth: "40ch", margin: 0 }}>
                 {COPY[lang].heroBody}
               </p>
 
@@ -1227,22 +1417,28 @@ export default function YGroupLanding() {
                 >
                   {COPY[lang].viewPortfolio} <ArrowRight className="h-4 w-4" />
                 </button>
+
                 <button
-                 onClick={() => scrollToEl(contactoRef, { focusEmail: true })}
-                 className="rounded-xl px-3 py-1.5 text-xs border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
-                 >
+                  onClick={() => scrollToEl(contactoRef, { focusEmail: true })}
+                  className="rounded-xl px-3 py-1.5 text-xs border border-slate-800 bg-slate-900/50 text-slate-300 hover:bg-slate-900"
+                >
                   {t.talk}
                 </button>
               </div>
             </motion.div>
 
-            {/* globo */}
             <div className="hidden md:flex items-center justify-center">
               <HeroGlobe size={520} />
             </div>
           </div>
         </div>
       </section>
+
+      {/* Banda animada + texto reveal */}
+      <StickyManifesto lang={lang} />
+
+      {/* Debajo: features + logos */}
+      <InfoAndLogos theme="dark" lang={lang} logos={LOGOS} />
 
       {/* PORTFOLIO */}
       <section id="portfolio" ref={portfolioRef} className="mx-auto w-full max-w-7xl px-6 pb-10">
@@ -1258,12 +1454,7 @@ export default function YGroupLanding() {
             onClose={() => setActiveCat("all")}
           />
         ) : (
-          <div className={cx(
-            "rounded-3xl overflow-hidden",
-            theme === "dark"
-              ? "border border-slate-800/60"
-              : "border border-slate-200 bg-white"
-          )}>
+          <div className={cx("rounded-3xl overflow-hidden", "border border-slate-800/60")}>
             <CategoryOpen
               key="dark"
               title={CATEGORIES.find((c) => c.id === activeCat).title[lang]}
@@ -1281,34 +1472,15 @@ export default function YGroupLanding() {
         )}
       </section>
 
-      {/* MODAL company */}
-      {selected && (
-        <CompanyModal
-          companyId={selected}
-          onClose={() => setSelected(null)}
-          theme="dark"
-          lang={lang}
-        />
-      )}
+      {selected && <CompanyModal companyId={selected} onClose={() => setSelected(null)} theme="dark" lang={lang} />}
 
       {/* CONTACTO */}
       <section id="contacto" ref={contactoRef} className="mx-auto w-full max-w-7xl px-6 py-12">
-        <div
-          className={cx(
-            "rounded-3xl p-8",
-            theme === "dark"
-              ? "border border-slate-800 bg-gradient-to-br from-slate-900/70 to-slate-900/40"
-              : "border border-slate-200 bg-white"
-          )}
-        >
+        <div className="rounded-3xl p-8 border border-slate-800 bg-gradient-to-br from-slate-900/70 to-slate-900/40">
           <div className="grid items-center gap-6 md:grid-cols-3">
             <div className="md:col-span-2">
-              <h2 className={cx("text-2xl font-semibold", theme === "dark" ? "text-slate-50" : "text-slate-900")}>
-                {COPY[lang].buildNext}
-              </h2>
-              <p className={cx("mt-1 text-sm", theme === "dark" ? "text-slate-400" : "text-slate-600")}>
-                {COPY[lang].writeUs}
-              </p>
+              <h2 className="text-2xl font-semibold text-slate-50">{COPY[lang].buildNext}</h2>
+              <p className="mt-1 text-sm text-slate-400">{COPY[lang].writeUs}</p>
             </div>
             <form className="grid gap-3" action="https://formsubmit.co/contacto@ygroup.com" method="POST">
               <input type="hidden" name="_subject" value="Contacto YGroup" />
@@ -1320,22 +1492,12 @@ export default function YGroupLanding() {
                 type="email"
                 name="email"
                 required
-                className={cx(
-                  "rounded-xl px-3 py-2 text-sm placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500",
-                  theme === "dark"
-                    ? "border border-slate-800 bg-slate-900/60 text-slate-200"
-                    : "border border-slate-300 bg-white text-slate-800"
-                )}
+                className="rounded-xl px-3 py-2 text-sm placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500 border border-slate-800 bg-slate-900/60 text-slate-200"
               />
               <input
                 placeholder={lang === "es" ? "Empresa / proyecto" : "Company / project"}
                 name="empresa"
-                className={cx(
-                  "rounded-xl px-3 py-2 text-sm placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500",
-                  theme === "dark"
-                    ? "border border-slate-800 bg-slate-900/60 text-slate-200"
-                    : "border border-slate-300 bg-white text-slate-800"
-                )}
+                className="rounded-xl px-3 py-2 text-sm placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500 border border-slate-800 bg-slate-900/60 text-slate-200"
               />
               <button
                 type="submit"
@@ -1349,7 +1511,6 @@ export default function YGroupLanding() {
         </div>
       </section>
 
-      {/* GRACIAS */}
       <section id="gracias" className="mx-auto w-full max-w-7xl px-6 pb-4">
         <ThankYouBanner theme="dark" lang={lang} />
       </section>
