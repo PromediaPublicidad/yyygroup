@@ -248,15 +248,20 @@ const COMPANIES = {
       es: [
         "Servicios para consultar información pública de empresas en Panamá.",
         "Facilita verificación y transparencia para decisiones informadas.",
+        "Aliado comercial: Boogy Latam.",
       ],
       en: [
         "Services to query public corporate information in Panama.",
         "Enables verification and transparency for informed decisions.",
+        "Commercial partner: Boogy Latam.",
       ],
     },
-    contacts: {},
+    contacts: { instagram: "https://www.instagram.com/boogy.latam/" },
     url: "#",
-    images: ["/images/companies/velox/1.jpeg"],
+    images: [
+      "/images/companies/velox/1.jpeg",
+      "/images/companies/velox/aliados-comerciales-boogy.png",
+    ],
   },
   dyoni: {
     name: { es: "Dyoni", en: "Dyoni" },
