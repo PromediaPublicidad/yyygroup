@@ -1125,94 +1125,8 @@ function UsersMini() {
   );
 }
 
-const MARQUEE_LOGOS = [
-  "medifergroup",
-  "velox",
-  "mcdonalds",
-  "roadster",
-  "shams",
-  "rosaclara",
-  "promedia",
-  "aleph",
-];
-
-/* ───────────────── Carrusel de logos (TRANSPARENTE / sin banda) ───────────────── */
-function LogoMarquee({ logos = {} }) {
-  const list = MARQUEE_LOGOS.map((id) => ({ id, src: logos[id] })).filter((x) => Boolean(x.src));
-  const loop = [...list, ...list];
-
-  const LOGO_SCALE = {
-    velox: 1.55,
-    rosaclara: 1.25,
-    promedia: 1.1,
-    aleph: 1.15,
-    medifergroup: 1.35,
-    roadster: 1.2,
-    shams: 1.25,
-    mcdonalds: 1.05,
-  };
-
-  return (
-    <div className="relative w-full">
-      <style>{`
-        @keyframes ygroup-marquee {
-          0% { transform: translate3d(0,0,0); }
-          100% { transform: translate3d(-50%,0,0); }
-        }
-      `}</style>
-
-      <div className="relative overflow-hidden">
-        <div
-          className="relative"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
-            maskImage:
-              "linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%)",
-          }}
-        >
-          <div
-            className="flex w-[200%] items-center gap-10 md:gap-14 py-2"
-            style={{ animation: "ygroup-marquee 24s linear infinite" }}
-          >
-            {loop.map((x, i) => {
-              const s = LOGO_SCALE[x.id] ?? 1;
-              return (
-                <div key={`${x.id}-${i}`} className="flex min-w-[190px] md:min-w-[260px] items-center justify-center">
-                  <motion.img
-                    src={x.src}
-                    alt={x.id}
-                    loading="lazy"
-                    className="block w-auto object-contain select-none"
-                    style={{
-                      height: "clamp(24px, 3.4vw, 48px)",
-                      transform: `scale(${s})`,
-                      transformOrigin: "center",
-                      opacity: 0.88,
-                      filter:
-                        "drop-shadow(0 12px 28px rgba(0,0,0,0.55)) drop-shadow(0 0 10px rgba(56,189,248,0.10))",
-                    }}
-                    whileHover={{
-                      opacity: 1,
-                      y: -2,
-                      filter:
-                        "drop-shadow(0 18px 40px rgba(0,0,0,0.70)) drop-shadow(0 0 18px rgba(56,189,248,0.22))",
-                    }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    draggable={false}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ───────────────── Bloque info + logos (misma atmósfera del fondo) ───────────────── */
-function InfoAndLogos({ theme = "dark", lang = "es", logos = {} }) {
+/* ───────────────── Bloque de beneficios (misma atmósfera del fondo) ───────────────── */
+function InfoAndLogos({ lang = "es" }) {
   const FEATURES = [
     {
       title: lang === "es" ? "Administración profesional" : "Professional administration",
@@ -1232,7 +1146,7 @@ function InfoAndLogos({ theme = "dark", lang = "es", logos = {} }) {
   ];
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-6 pb-10">
+    <section className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 sm:pb-10">
       <div className="relative">
         <div className="pointer-events-none absolute -inset-x-8 -inset-y-10 bg-[radial-gradient(60%_45%_at_50%_0%,rgba(56,189,248,0.12),transparent_60%),radial-gradient(40%_40%_at_20%_30%,rgba(34,211,238,0.08),transparent_60%)] blur-2xl" />
 
@@ -1241,7 +1155,7 @@ function InfoAndLogos({ theme = "dark", lang = "es", logos = {} }) {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.55, ease: "easeOut" }}
-          className="grid gap-3 md:grid-cols-3"
+          className="grid gap-3 md:grid-cols-3 md:gap-4"
         >
           {FEATURES.map((f, idx) => (
             <motion.div
@@ -1266,15 +1180,6 @@ function InfoAndLogos({ theme = "dark", lang = "es", logos = {} }) {
           ))}
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.55, ease: "easeOut", delay: 0.06 }}
-          className="mt-4"
-        >
-          <LogoMarquee logos={logos} />
-        </motion.div>
       </div>
     </section>
   );
@@ -1442,8 +1347,8 @@ export default function YGroupLanding() {
       {/* Banda animada + texto reveal */}
       <StickyManifesto lang={lang} />
 
-      {/* Debajo: features + logos */}
-      <InfoAndLogos theme="dark" lang={lang} logos={LOGOS} />
+      {/* Debajo: beneficios */}
+      <InfoAndLogos lang={lang} />
 
       {/* PORTFOLIO */}
       <section id="portfolio" ref={portfolioRef} className="mx-auto w-full max-w-7xl px-6 pb-10">
