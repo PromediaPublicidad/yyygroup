@@ -12,7 +12,7 @@ const CARDS = [
     label: { es: "Salud", en: "Healthcare" },
     blurb: {
       es: "Salud, bienestar y tecnología médica.",
-      en: "Health, wellbeing and medical tech.",
+      en: "Healthcare, well-being and medical technology.",
     },
     tint: "from-cyan-400/10 to-cyan-500/5",
   },
@@ -22,7 +22,7 @@ const CARDS = [
     label: { es: "Distribución", en: "Distribution" },
     blurb: {
       es: "Logística, insumos y cadena de suministro.",
-      en: "Logistics, supplies & supply chain.",
+      en: "Logistics, supplies and supply-chain solutions.",
     },
     tint: "from-sky-400/10 to-sky-500/5",
   },

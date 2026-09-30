@@ -83,14 +83,14 @@ const COPY = {
     heroTitle: "Leading investments with impact across industries.",
     heroBody:
       "YGroup integrates companies in healthcare, distribution, retail and services. Less noise, more execution.",
-    viewPortfolio: "View portfolio",
+    viewPortfolio: "Explore our portfolio",
     talk: "Let’s talk",
     contact: "Contact",
     thanks: "Thanks! Your message was sent. We’ll be in touch soon.",
-    buildNext: "Let’s build the next move.",
+    buildNext: "Let’s build what’s next.",
     writeUs: "Write to us and we’ll connect you with the right team in the group.",
     send: "Send",
-    up: "Top",
+    up: "Back to top",
     close: "Close",
     all: "All",
     webCta: "Website",
@@ -98,8 +98,8 @@ const COPY = {
     cat_distribution: "Distribution",
     cat_retail: "Retail",
     cat_services: "Services",
-    blurb_healthcare: "Health, wellbeing and medical technology.",
-    blurb_distribution: "Logistics, supplies, and supply chain.",
+    blurb_healthcare: "Healthcare, well-being and medical technology.",
+    blurb_distribution: "Logistics, supplies and supply-chain solutions.",
     blurb_retail: "Brands and consumer experiences.",
     blurb_services: "Digital and financial solutions.",
     view: "View",
@@ -144,7 +144,7 @@ const COMPANIES = {
       ],
       en: [
         "Redefining aging with a science-based approach.",
-        "Long-term wellbeing through comprehensive care and regenerative therapies.",
+        "Long-term well-being through comprehensive care and regenerative therapies.",
       ],
     },
     contacts: { web: "https://antiagingpanama.com/" },
@@ -165,7 +165,7 @@ const COMPANIES = {
         "Rutas de atención claras, esperas reducidas y comunicación directa.",
       ],
       en: [
-        "General medical center for everyday needs with speed and proximity.",
+        "A general medical center offering accessible, everyday care.",
         "Clear care paths, reduced wait times, and direct communication.",
       ],
     },
@@ -187,7 +187,7 @@ const COMPANIES = {
         "Asesoría experta, diagnóstico visual y catálogo amplio.",
       ],
       en: [
-        "Clinical optics with an in-house lab for precision and speed.",
+        "Optical care with an in-house lab for precision and speed.",
         "Expert advice, visual diagnostics and a broad catalog.",
       ],
     },
@@ -208,7 +208,7 @@ const COMPANIES = {
         "Distribución de productos farmacéuticos y de salud en Latam, con foco en estrategias de marca.",
       ],
       en: [
-        "Distribution of pharmaceutical and health products in Latin America, with a focus on brand strategies.",
+        "Distribution of pharmaceutical and healthcare products in Latin America, with a focus on brand strategy.",
       ],
     },
     contacts: {},
@@ -229,7 +229,7 @@ const COMPANIES = {
       ],
       en: [
         "Great Place to Work",
-        "We are committed to solving the problems of the tire industry.",
+        "We are committed to addressing challenges in the tire industry.",
       ],
     },
     contacts: { web: "https://alephgroupcorp.com/" },
@@ -252,8 +252,8 @@ const COMPANIES = {
         "Aliado comercial: Boogy Latam.",
       ],
       en: [
-        "Services to query public corporate information in Panama.",
-        "Enables verification and transparency for informed decisions.",
+        "A platform for accessing public company information in Panama.",
+        "Supporting verification and transparency for better-informed decisions.",
         "Commercial partner: Boogy Latam.",
       ],
     },
@@ -272,8 +272,8 @@ const COMPANIES = {
         "Curaduría enfocada en calidad y disponibilidad real en tienda.",
       ],
       en: [
-        "Premium hookah supplies: tobaccos, coconut charcoals and accessories.",
-        "Curation focused on quality and real in-store availability.",
+        "Premium hookah supplies: tobacco, coconut charcoal and accessories.",
+        "A curated selection focused on quality and reliable in-store availability.",
       ],
     },
     contacts: {},
@@ -284,7 +284,7 @@ const COMPANIES = {
     name: { es: "Montevito", en: "Montevito" },
     story: {
       es: ["Vitrina de alimentos y bebidas con curaduría.", "Selección cuidada y disponibilidad confiable."],
-      en: ["Curated food & beverage store.", "Careful selection with dependable availability."],
+      en: ["A curated food and beverage retail concept.", "Careful selection with dependable availability."],
     },
     contacts: {},
     url: "#",
@@ -299,7 +299,7 @@ const COMPANIES = {
         "Productos icónicos: hamburguesas, papas, desayunos y bebidas.",
       ],
       en: [
-        "Global QSR franchise with robust local operations.",
+        "Global QSR franchise with 14 restaurants across Panama.",
         "Iconic products: burgers, fries, breakfast and beverages.",
       ],
     },
@@ -317,7 +317,7 @@ const COMPANIES = {
     name: { es: "Roadster Diner", en: "Roadster Diner" },
     story: {
       es: ["Restaurante estilo diner con ambiente que invita a quedarse.", "Clásicos reconfortantes con ejecución consistente."],
-      en: ["Diner-style restaurant with a stay-long vibe.", "Comfort classics with consistent execution."],
+      en: ["Diner-style restaurant with an atmosphere that invites guests to stay.", "Comfort classics with consistent execution."],
     },
     contacts: { instagram: "https://www.instagram.com/roadstersdinerpty/?hl=es" },
     url: "#",
@@ -333,7 +333,7 @@ const COMPANIES = {
     name: { es: "Shams Market", en: "Shams Market" },
     story: {
       es: ["Retail orientado al cuidado personal y la belleza cotidiana.", "Marcas confiables y experiencia para descubrir sin prisa."],
-      en: ["Retail concept for everyday self-care and beauty.", "Trusted brands and an experience for unhurried discovery."],
+      en: ["Retail concept for everyday self-care and beauty.", "Trusted brands and a relaxed discovery experience."],
     },
     contacts: {},
     url: "#",
@@ -366,7 +366,7 @@ const COMPANIES = {
     name: { es: "Promedia", en: "Promedia" },
     story: {
       es: ["Agencia 360° que empuja ideas hasta convertirlas en resultados.", "Estrategia, creatividad, producción y performance en un flujo."],
-      en: ["360° marketing agency that pushes ideas into results.", "Strategy, creativity, production and performance in one flow."],
+      en: ["360° marketing agency that turns ideas into results.", "Strategy, creativity, production and performance in one flow."],
     },
     contacts: { web: "https://www.promediapublicidad.com/" },
     url: "https://www.promediapublicidad.com/",
@@ -966,7 +966,7 @@ const Footer = ({ onGoTop, theme, lang }) => (
           {lang === "es" ? "¿Tienes un proyecto estratégico?" : "Got a strategic project?"}
         </p>
         <p className={cx("text-xs", theme === "dark" ? "text-slate-500" : "text-slate-600")}>
-          {lang === "es" ? "Conversemos sobre cómo YGroup puede potenciarlo." : "Let’s talk about how YGroup can boost it."}
+          {lang === "es" ? "Conversemos sobre cómo YGroup puede potenciarlo." : "Let’s talk about how YGroup can help move it forward."}
         </p>
       </div>
       <a
