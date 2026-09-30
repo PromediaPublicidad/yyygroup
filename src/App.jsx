@@ -224,12 +224,12 @@ const COMPANIES = {
     name: { es: "Aleph Group", en: "Aleph Group" },
     story: {
       es: [
-        "Actor clave en llantas con expansión regional.",
-        "Portafolio competitivo, cobertura logística y relaciones B2B de largo plazo.",
+        "Great Place to Work",
+        "Estamos comprometidos a resolver los problemas de la industria de los neumáticos.",
       ],
       en: [
-        "Key player in the tire industry with regional expansion.",
-        "Competitive portfolio, logistics coverage and long-term B2B relationships.",
+        "Great Place to Work",
+        "We are committed to solving the problems of the tire industry.",
       ],
     },
     contacts: { web: "https://alephgroupcorp.com/" },
@@ -237,8 +237,9 @@ const COMPANIES = {
     images: [
       "/images/companies/aleph/1.png",
       "/images/companies/aleph/2.webp",
-      "/images/companies/aleph/3.jpg",
-      "/images/companies/aleph/4.jpg",
+      "/images/companies/aleph/3.webp",
+      "/images/companies/aleph/4.webp",
+      "/images/companies/aleph/5.jpg",
     ],
   },
   velox: {
