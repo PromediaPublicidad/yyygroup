@@ -680,8 +680,8 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
             key={images[idx]}
             src={images[idx]}
             alt={alt}
-            className={cx("h-full w-full", isMobile ? "object-contain bg-slate-950/40" : "object-cover")}
-            style={{ objectPosition: `50% ${currentY}%`, scale: currentScale }}
+            className="h-full w-full bg-slate-950/40 object-contain"
+            style={{ objectPosition: `50% ${currentY}%`, scale: 1 }}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -706,7 +706,7 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
                     i === idx ? "border-cyan-300" : "border-transparent opacity-60"
                   )}
                 >
-                  <img src={image} alt="" className="h-full w-full object-cover" loading="lazy" />
+                  <img src={image} alt="" className="h-full w-full bg-slate-950/40 object-contain" loading="lazy" />
                 </button>
               ))}
             </div>
