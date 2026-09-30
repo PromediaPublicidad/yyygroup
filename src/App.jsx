@@ -212,7 +212,7 @@ const COMPANIES = {
       ],
     },
     contacts: {},
-    url: "#",
+    url: "https://www.medifergroup.com/",
     images: [
       "/images/companies/medifergroup/1.webp",
       "/images/companies/medifergroup/2.webp",
