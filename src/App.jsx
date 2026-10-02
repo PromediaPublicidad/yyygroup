@@ -237,7 +237,7 @@ const COMPANIES = {
     contacts: { web: "https://alephgroupcorp.com/" },
     url: "https://alephgroupcorp.com/",
     images: [
-      "/images/companies/aleph/great-place-to-work-v2.png",
+      "/images/companies/aleph/great-place-to-work-v2.webp",
       "/images/companies/aleph/1.png",
       "/images/companies/aleph/2.webp",
       "/images/companies/aleph/3.webp",
@@ -328,7 +328,7 @@ const COMPANIES = {
       "/images/companies/roadster/2.jpg",
       "/images/companies/roadster/3.webp",
       "/images/companies/roadster/4.jpg",
-      "/images/companies/roadster/5-enhanced.png",
+      "/images/companies/roadster/5-enhanced.webp",
     ],
   },
   shams: {
