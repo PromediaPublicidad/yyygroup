@@ -206,17 +206,19 @@ const COMPANIES = {
     story: {
       es: [
         "Distribución de productos farmacéuticos y de salud en Latam, con foco en estrategias de marca.",
+        "Representando marcas internacionales farmacéuticas y de salud en Latinoamérica mediante un modelo de distribuidor maestro.",
       ],
       en: [
         "Distribution of pharmaceutical and healthcare products in Latin America, with a focus on brand strategy.",
+        "Representing international pharmaceutical and healthcare brands across Latin America through a master distributor model.",
       ],
     },
     contacts: {},
     url: "https://www.medifergroup.com/",
     images: [
-      "/images/companies/medifergroup/1.webp",
-      "/images/companies/medifergroup/2.webp",
-      "/images/companies/medifergroup/3.webp",
+      "/images/companies/medifergroup/1.jpg",
+      "/images/companies/medifergroup/2.jpg",
+      "/images/companies/medifergroup/3.jpg",
     ],
   },
 
@@ -235,7 +237,7 @@ const COMPANIES = {
     contacts: { web: "https://alephgroupcorp.com/" },
     url: "https://alephgroupcorp.com/",
     images: [
-      "/images/companies/aleph/great-place-to-work.jpg",
+      "/images/companies/aleph/great-place-to-work-v2.png",
       "/images/companies/aleph/1.png",
       "/images/companies/aleph/2.webp",
       "/images/companies/aleph/3.webp",
@@ -326,7 +328,7 @@ const COMPANIES = {
       "/images/companies/roadster/2.jpg",
       "/images/companies/roadster/3.webp",
       "/images/companies/roadster/4.jpg",
-      "/images/companies/roadster/5.jpg",
+      "/images/companies/roadster/5-enhanced.png",
     ],
   },
   shams: {
@@ -692,7 +694,8 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: isMobile ? 0.2 : 0.35 }}
-            loading={idx === 0 ? "eager" : "lazy"}
+            loading="eager"
+            decoding="async"
           />
         </AnimatePresence>
       </div>
@@ -712,7 +715,7 @@ function Carousel({ images = [], alt = "", theme = "dark", positions = [], zoom 
                     i === idx ? "border-cyan-300" : "border-transparent opacity-60"
                   )}
                 >
-                  <img src={image} alt="" className="h-full w-full bg-slate-950/40 object-contain" loading="lazy" />
+                  <img src={image} alt="" className="h-full w-full bg-slate-950/40 object-contain" loading="eager" decoding="async" />
                 </button>
               ))}
             </div>
